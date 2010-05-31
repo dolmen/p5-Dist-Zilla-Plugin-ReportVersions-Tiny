@@ -7,17 +7,27 @@ use Test::Exception;
 use Test::MockObject;
 use File::Temp;
 
-unified_diff;                   # format diff output nicely, please.
+use vars qw{$prereq $dz $log};
+BEGIN {
+    # Done early, hopefully before anything else might load Dist::Zilla.
+    my $dz_prereq = Test::MockObject->new;
+    $dz_prereq->set_bound(as_string_hash => \$prereq);
 
-use vars qw{$prereq};
-my $dz_prereq = Test::MockObject->new;
-$dz_prereq->set_bound(as_string_hash => \$prereq);
+    $log = Test::MockObject->new;
+    $log->set_always(log => $1);
 
-my $dz = Test::MockObject->new;
-$dz->set_isa('Dist::Zilla');
-$dz->fake_module('Dist::Zilla');
-$dz->fake_new('Dist::Zilla');
-$dz->set_always(prereqs => $dz_prereq);
+    my $dz_logger = Test::MockObject->new;
+    $dz_logger->set_always(proxy => $log);
+
+    my $dz_chrome = Test::MockObject->new;
+    $dz_chrome->set_always(logger => $dz_logger);
+
+    $dz = Test::MockObject->new;
+    $dz->fake_module('Dist::Zilla');
+    $dz->set_isa('Dist::Zilla');
+    $dz->set_always(prereqs => $dz_prereq);
+    $dz->set_always(chrome  => $dz_chrome);
+}
 
 
 # This evaluates at runtime, which is important.
@@ -44,6 +54,14 @@ lives_ok {
 
     eq_or_diff $modules, { baz => 2, foox => 1, quux => 1 },
         "we collected the first round of modules as expected";
+
+    # Did we get the logging we expected?
+    is $log->call_pos(1), 'log', 'logging was called as expected';
+    is $log->call_args_pos(1, 2),
+        'Will not report version of excluded module Moose.',
+            "logging was called with the right arguments.";
+
+    is $log->call_pos(2), undef, 'logging was only called once';
 }
 
 done_testing;

@@ -105,6 +105,7 @@ sub applicable_modules {
     # Cleanup
     for my $module ( keys %modules ) {
         if (grep { $module =~ m{$_} } @{ $self->exclude }) {
+            $self->log("Will not report version of excluded module ${module}.");
             delete $modules{$module};
         }
     }
