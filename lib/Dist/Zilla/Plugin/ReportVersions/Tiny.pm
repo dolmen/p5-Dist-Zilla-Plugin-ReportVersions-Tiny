@@ -23,7 +23,8 @@ eval {                     # no excuses!
 
 # Now, our module version dependencies:
 sub pmver {
-    my ($module) = @_;
+    my ($module, $wanted) = @_;
+    $wanted = " (want $wanted)";
     my $pmver;
     eval "require $module;";
     if ($@) {
@@ -47,13 +48,12 @@ sub pmver {
     }
 
     # So, we should be good, right?
-    return sprintf('%-40s => %s%s', $module, $pmver, "\n");
+    return sprintf('%-40s => %-10s%-15s%s', $module, $pmver, $wanted, "\n");
 }
 
 {{
     for my $module (@modules) {
-        my $text = "eval { \$v .= pmver('${module}') };\n";
-        $OUT .= $text;
+        $OUT .= "eval { \$v .= pmver('" . $module->[0] . "','" . $module->[1] . "') };\n";
     }
 }}
 
@@ -75,36 +75,34 @@ sub applicable_modules {
     my ($self) = @_;
 
     # Extract the set of modules we depend on.
-    my @modules;
-    {
-        my %modules;
-        my $prereq = $self->zilla->prereqs->as_string_hash;
-        for my $phase (keys %{ $prereq || {} }) {
-            for my $type (keys %{ $prereq->{$phase} || {} }) {
-                for my $module (keys %{ $prereq->{$phase}->{$type} || {} }) {
-                    $modules{$module} = 1;
-                }
+    my %modules;
+    my $prereq = $self->zilla->prereqs->as_string_hash;
+
+    for my $phase (keys %{ $prereq || {} }) {
+        for my $type (keys %{ $prereq->{$phase} || {} }) {
+            for my $module (keys %{ $prereq->{$phase}->{$type} || {} }) {
+                next if exists $modules{$module} and
+                    $modules{$module} > $prereq->{$phase}->{$type}->{$module};
+
+                $modules{$module} = $prereq->{$phase}->{$type}->{$module};
             }
         }
-
-        # This is all I ever really cared about.
-        @modules = sort { lc($a) cmp lc($b) }
-            grep {
-                my $name = $_;
-                my $found = grep { $name =~ m{$_} } @{ $self->exclude };
-                $found == 0;
-            }
-                grep { $_ ne 'perl' }
-                    keys %modules;
     }
 
-    return @modules;
+    # cleanup
+    for my $module ( keys %modules ) {
+        if ($module eq 'perl' or grep { $module =~ m{$_} } @{ $self->exclude }) {
+            delete $modules{$module};
+        }
+    }
+
+    return [ map { [ $_ => $modules{$_} ] } sort keys %modules ];
 }
 
 sub generate_test_from_prereqs {
     my ($self) = @_;
     my $content = $self->fill_in_string($template, {
-        modules => [$self->applicable_modules]
+        modules => $self->applicable_modules
     });
 
     return $content;

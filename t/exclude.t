@@ -34,15 +34,15 @@ lives_ok {
 
 {
     $prereq = {
-        testing => { requires => { baz => 1, quux => 1 } },
+        testing => { requires => { baz => 1, quux => 1, Moose => 5 } },
         build   => { requires => { baz => 2, foox => 1 } },
     };
 
-    my @modules;
-    lives_ok { @modules = $rv->applicable_modules }
+    my $modules;
+    lives_ok { $modules = $rv->applicable_modules }
         "we can collect the applicable modules for the distribution";
 
-    eq_or_diff \@modules, [qw{baz foox quux}],
+    eq_or_diff $modules, [[baz => 2], [foox => 1], [quux => 1]],
         "we collected the first round of modules as expected";
 }
 
