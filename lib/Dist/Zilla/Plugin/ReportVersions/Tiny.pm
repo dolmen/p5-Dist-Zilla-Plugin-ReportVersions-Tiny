@@ -8,18 +8,28 @@ use Dist::Zilla::File::FromCode;
 sub mvp_multivalue_args { qw{exclude} };
 has exclude => (is => 'ro', isa => 'ArrayRef', default => sub { [] });
 
-
 our $template = q{use strict;
 use warnings;
-use Test::More 'no_plan';  # the safest way to avoid Test::NoWarnings breaking
-                           # our expectations is no_plan, not done_testing!
+use Test::More 0.88;
+# This is a relatively nice way to avoid Test::NoWarnings breaking our
+# expectations by adding extra tests, without using no_plan.  It also helps
+# avoid any other test module that feels introducing random tests, or even
+# test plans, is a nice idea.
+our $success = 0;
+END { $success && done_testing; }
 
 my $v = "\n";
 
 eval {                     # no excuses!
+    # report our Perl details
+    my $want = {{
+        my $perl_version = delete $modules{perl};
+        defined($perl_version) ? "'${perl_version}'" : '"any version"';
+    }};
     my $pv = ($^V || $]);
-    $v .= "perl: $pv on $^O from $^X\n\n";     # report our Perl details
+    $v .= "perl: $pv (wanted $want) on $^O from $^X\n\n";
 };
+defined($@) and diag("$@");
 
 # Now, our module version dependencies:
 sub pmver {
@@ -52,8 +62,9 @@ sub pmver {
 }
 
 {{
-    for my $module (@modules) {
-        $OUT .= "eval { \$v .= pmver('" . $module->[0] . "','" . $module->[1] . "') };\n";
+    for my $mod (sort keys %modules) {
+        my $ver = $modules{$mod};
+        $OUT .= "eval { \$v .= pmver('${mod}','${ver}') };\n";
     }
 }}
 
@@ -68,6 +79,7 @@ EOT
 
 diag($v);
 ok(1, "we really didn't test anything, just reporting data");
+$success = 1;
 exit 0;
 };
 
@@ -78,6 +90,7 @@ sub applicable_modules {
     my %modules;
     my $prereq = $self->zilla->prereqs->as_string_hash;
 
+    # Identify the set of modules, and the highest version required.
     for my $phase (keys %{ $prereq || {} }) {
         for my $type (keys %{ $prereq->{$phase} || {} }) {
             for my $module (keys %{ $prereq->{$phase}->{$type} || {} }) {
@@ -89,14 +102,14 @@ sub applicable_modules {
         }
     }
 
-    # cleanup
+    # Cleanup
     for my $module ( keys %modules ) {
-        if ($module eq 'perl' or grep { $module =~ m{$_} } @{ $self->exclude }) {
+        if (grep { $module =~ m{$_} } @{ $self->exclude }) {
             delete $modules{$module};
         }
     }
 
-    return [ map { [ $_ => $modules{$_} ] } sort keys %modules ];
+    return \%modules;
 }
 
 sub generate_test_from_prereqs {

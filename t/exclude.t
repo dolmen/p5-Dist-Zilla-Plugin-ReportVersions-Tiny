@@ -42,7 +42,7 @@ lives_ok {
     lives_ok { $modules = $rv->applicable_modules }
         "we can collect the applicable modules for the distribution";
 
-    eq_or_diff $modules, [[baz => 2], [foox => 1], [quux => 1]],
+    eq_or_diff $modules, { baz => 2, foox => 1, quux => 1 },
         "we collected the first round of modules as expected";
 }
 
