@@ -64,6 +64,7 @@ sub pmver {
 {{
     for my $mod (sort keys %modules) {
         my $ver = $modules{$mod};
+        $ver = 'any version' if $ver == 0;
         $OUT .= "eval { \$v .= pmver('${mod}','${ver}') };\n";
     }
 }}
