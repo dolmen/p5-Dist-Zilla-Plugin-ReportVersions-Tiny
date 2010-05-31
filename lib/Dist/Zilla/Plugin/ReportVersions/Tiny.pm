@@ -80,6 +80,10 @@ EOT
 diag($v);
 ok(1, "we really didn't test anything, just reporting data");
 $success = 1;
+
+# Work around another nasty module on CPAN. :/
+no warnings 'once';
+$Template::Test::NO_FLUSH = 1;
 exit 0;
 };
 
