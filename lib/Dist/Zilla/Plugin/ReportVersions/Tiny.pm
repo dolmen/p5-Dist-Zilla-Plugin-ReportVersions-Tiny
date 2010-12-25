@@ -64,7 +64,9 @@ sub pmver {
 {{
     for my $mod (sort keys %modules) {
         my $ver = $modules{$mod};
-        $ver = 'any version' if $ver == 0;
+        # The string comparison is important: it stops us treating "0.0.6" as
+        # equal to "0"; see CPAN RT #63912
+        $ver = 'any version' if $ver eq '0';
         $OUT .= "eval { \$v .= pmver('${mod}','${ver}') };\n";
     }
 }}
