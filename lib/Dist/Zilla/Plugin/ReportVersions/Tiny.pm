@@ -5,8 +5,9 @@ with 'Dist::Zilla::Role::TextTemplate';
 
 use Dist::Zilla::File::FromCode;
 
-sub mvp_multivalue_args { qw{exclude} };
+sub mvp_multivalue_args { qw{exclude include} };
 has exclude => (is => 'ro', isa => 'ArrayRef', default => sub { [] });
+has include => (is => 'ro', isa => 'ArrayRef', default => sub { [] });
 
 our $template = q{use strict;
 use warnings;
@@ -116,6 +117,14 @@ sub applicable_modules {
         }
     }
 
+    # Add any "interesting" modules you might want reported
+    for my $include ( @{ $self->include } ){
+        # split by whitespace; also allow equal sign between "Mod::Name = 1.1"
+        my ( $module, $version ) = (split(/[ =]+/, $include), 0);
+        $self->log("Will also report version of included module ${module}.");
+        $modules{$module} = $version;
+    }
+
     return \%modules;
 }
 
@@ -198,6 +207,32 @@ Exclude an individual items from version reporting.
 This is most commonly required if some module otherwise interferes with the
 normal operation of the tests, such as L<Module::Install>, which does not
 behave as you might expect if normally C<use>d.
+
+=item B<include>
+
+  [ReportVersions::Tiny]
+  include = JSON:PP 2.27103
+  include = Path::Class
+  include = Some::Thing = 1.1
+
+Include extra modules in version reporting.
+This can be specified multiple times.  The module name and version can be
+separated by spaces (and/or an equal sign).  If no version is specified
+"0" will be used.
+
+This can be useful to help track down issues in installation or testing
+environments.  Perhaps a module used by one of your prereqs is broken
+and/or has a missing (or insufficient) dependency.  You can use this option
+to specify multiple extra modules whose versions you would like reported.
+They aren't modules that you need to declare as prerequisites
+since you don't use them directly, but you've found installation issues
+and it would be nice to show which version (if any) is in fact installed.
+
+This option is inspired by advice from Andreas J. König (ANDK)
+who suggested adding a list of "interesting modules" to the
+F<Makefile.PL> and checking their version so that the test reports can show
+which version (if any) is in fact installed
+(see the L<CPAN> dist for an example).
 
 =back
 
