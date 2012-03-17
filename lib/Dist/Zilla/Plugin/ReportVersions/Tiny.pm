@@ -22,10 +22,7 @@ my $v = "\n";
 
 eval {                     # no excuses!
     # report our Perl details
-    my $want = {{
-        my $perl_version = delete $modules{perl};
-        defined($perl_version) ? "'${perl_version}'" : '"any version"';
-    }};
+    my $want = {{ $perl }};
     my $pv = ($^V || $]);
     $v .= "perl: $pv (wanted $want) on $^O from $^X\n\n";
 };
@@ -61,13 +58,7 @@ sub pmver {
     return sprintf('%-45s => %-10s%-15s%s', $module, $pmver, $wanted, "\n");
 }
 
-{{
-    for my $mod (sort keys %modules) {
-        my $ver = $modules{$mod};
-        $ver = 'any version' if $ver == 0;
-        $OUT .= "eval { \$v .= pmver('${mod}','${ver}') };\n";
-    }
-}}
+{{$module_code}}
 
 
 # All done.
@@ -119,10 +110,33 @@ sub applicable_modules {
     return \%modules;
 }
 
+sub generate_eval_stubs {
+    my ( $self, $modules ) = @_;
+
+    return join qq{\n}, map {
+        my $ver = $modules->{$_};
+        $ver = 'any version' if $ver == 0;
+        sprintf q[eval { $v .= pmver('%s','%s') };],  $_, $ver ;
+    } sort keys %{$modules};
+};
+
+sub wanted_perl {
+    my ( $self, $modules ) = @_;
+    my $perl_version = delete $modules->{perl};
+    defined($perl_version) ? "'${perl_version}'" : '"any version"';
+}
+
 sub generate_test_from_prereqs {
     my ($self) = @_;
+
+    my $modules = $self->applicable_modules;
+
+    my $perl = $self->wanted_perl( $modules );
+    my $module_code = $self->generate_eval_stubs( $modules );
+    
     my $content = $self->fill_in_string($template, {
-        modules => $self->applicable_modules
+        perl    => $perl,
+        module_code => $module_code,
     });
 
     return $content;
