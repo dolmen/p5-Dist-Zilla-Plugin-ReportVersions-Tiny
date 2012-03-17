@@ -3,7 +3,7 @@ use warnings;
 
 use Test::More 0.88;
 use Test::Differences;
-use Test::Exception;
+use Test::Fatal qw( exception );
 use Test::MockObject;
 use File::Temp;
 use FindBin;
@@ -15,13 +15,13 @@ use MockZilla;
 use_ok('Dist::Zilla::Plugin::ReportVersions::Tiny');
 
 my $rv;
-lives_ok {
+is( exception {
     $rv = Dist::Zilla::Plugin::ReportVersions::Tiny->new(
         exclude     => [qw{Moose Unmatched::Module}],
         plugin_name => 'ReportVersions::Tiny',
         zilla       => MockZilla->dzil,
     );
-} "we can create an instance with multiple exclusions";
+}, undef,  "we can create an instance with multiple exclusions");
 
 {
 
@@ -31,8 +31,8 @@ lives_ok {
     });
 
     my $modules;
-    lives_ok { $modules = $rv->applicable_modules }
-        "we can collect the applicable modules for the distribution";
+    is( exception { $modules = $rv->applicable_modules }, undef,
+        "we can collect the applicable modules for the distribution" );
 
     eq_or_diff $modules, { baz => 2, foox => 1, quux => 1 },
         "we collected the first round of modules as expected";
