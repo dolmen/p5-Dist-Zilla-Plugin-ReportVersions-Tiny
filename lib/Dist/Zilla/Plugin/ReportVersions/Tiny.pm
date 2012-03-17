@@ -4,6 +4,7 @@ with 'Dist::Zilla::Role::FileGatherer';
 with 'Dist::Zilla::Role::TextTemplate';
 
 use Dist::Zilla::File::FromCode;
+use version;
 
 sub mvp_multivalue_args { qw{exclude} };
 has exclude => (is => 'ro', isa => 'ArrayRef', default => sub { [] });
@@ -92,9 +93,9 @@ sub applicable_modules {
         for my $type (keys %{ $prereq->{$phase} || {} }) {
             for my $module (keys %{ $prereq->{$phase}->{$type} || {} }) {
                 next if exists $modules{$module} and
-                    $modules{$module} > $prereq->{$phase}->{$type}->{$module};
+                    $modules{$module} > version->parse($prereq->{$phase}->{$type}->{$module});
 
-                $modules{$module} = $prereq->{$phase}->{$type}->{$module};
+                $modules{$module} = version->parse( $prereq->{$phase}->{$type}->{$module} );
             }
         }
     }
