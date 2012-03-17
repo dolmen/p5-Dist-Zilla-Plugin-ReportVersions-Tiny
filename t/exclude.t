@@ -6,29 +6,10 @@ use Test::Differences;
 use Test::Exception;
 use Test::MockObject;
 use File::Temp;
+use FindBin;
+use lib "$FindBin::RealBin/lib/";
 
-use vars qw{$prereq $dz $log};
-BEGIN {
-    # Done early, hopefully before anything else might load Dist::Zilla.
-    my $dz_prereq = Test::MockObject->new;
-    $dz_prereq->set_bound(as_string_hash => \$prereq);
-
-    $log = Test::MockObject->new;
-    $log->set_always(log => $1);
-
-    my $dz_logger = Test::MockObject->new;
-    $dz_logger->set_always(proxy => $log);
-
-    my $dz_chrome = Test::MockObject->new;
-    $dz_chrome->set_always(logger => $dz_logger);
-
-    $dz = Test::MockObject->new;
-    $dz->fake_module('Dist::Zilla');
-    $dz->set_isa('Dist::Zilla');
-    $dz->set_always(prereqs => $dz_prereq);
-    $dz->set_always(chrome  => $dz_chrome);
-}
-
+use MockZilla;
 
 # This evaluates at runtime, which is important.
 use_ok('Dist::Zilla::Plugin::ReportVersions::Tiny');
@@ -38,15 +19,16 @@ lives_ok {
     $rv = Dist::Zilla::Plugin::ReportVersions::Tiny->new(
         exclude     => [qw{Moose Unmatched::Module}],
         plugin_name => 'ReportVersions::Tiny',
-        zilla       => $dz,
+        zilla       => MockZilla->dzil,
     );
 } "we can create an instance with multiple exclusions";
 
 {
-    $prereq = {
+
+    MockZilla->set_prereqs({
         testing => { requires => { baz => 1, quux => 1, Moose => 5 } },
         build   => { requires => { baz => 2, foox => 1 } },
-    };
+    });
 
     my $modules;
     lives_ok { $modules = $rv->applicable_modules }
@@ -56,12 +38,12 @@ lives_ok {
         "we collected the first round of modules as expected";
 
     # Did we get the logging we expected?
-    is $log->call_pos(1), 'log', 'logging was called as expected';
-    is $log->call_args_pos(1, 2),
+    is( MockZilla->logger->call_pos(1), 'log', 'logging was called as expected');
+    is( MockZilla->logger->call_args_pos(1, 2),
         'Will not report version of excluded module Moose.',
-            "logging was called with the right arguments.";
+            "logging was called with the right arguments." );
 
-    is $log->call_pos(2), undef, 'logging was only called once';
+    is( MockZilla->logger->call_pos(2), undef, 'logging was only called once' );
 }
 
 done_testing;
