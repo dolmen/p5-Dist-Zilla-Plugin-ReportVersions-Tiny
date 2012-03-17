@@ -118,6 +118,12 @@ sub applicable_modules {
         $modules{$module} = $version;
     }
 
+    # Turn objects back to strings.
+    for my $module ( keys %modules ) {
+        next unless ref $modules{$module};
+        $modules{$module} = "$modules{$module}";
+    }
+
     return \%modules;
 }
 
