@@ -132,7 +132,7 @@ sub generate_eval_stubs {
 
     return join qq{\n}, map {
         my $ver = $modules->{$_};
-        $ver = 'any version' if $ver == 0;
+        $ver = 'any version' if version->parse($ver) == 0;
         sprintf q[eval { $v .= pmver('%s','%s') };],  $_, $ver ;
     } sort keys %{$modules};
 };
