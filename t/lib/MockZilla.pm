@@ -1,7 +1,8 @@
 use strict;
 use warnings;
 
-package MockZilla;
+package  # no-index
+    MockZilla;
 
 # FILENAME: MockZilla.pm
 # CREATED: 18/03/12 02:39:10 by Kent Fredric (kentnl) <kentfredric@gmail.com>
