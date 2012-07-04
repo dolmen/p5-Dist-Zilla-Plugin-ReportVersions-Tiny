@@ -262,15 +262,26 @@ which version (if any) is in fact installed
 
 =head1 AUTHORS
 
-=over
+Maintainer since 1.04: Olivier MenguE<eacute> L<mailto:dolmen@cpan.org>.
 
-=item Daniel Pittman <daniel@rimspace.net>
+Original author: Daniel Pittman <daniel@rimspace.net>.
+
+Contributors:
+
+=over 4
+
+=item Kent Fredric
+
+=item Randy Stauner
 
 =back
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2010 by Daniel Pittman <daniel@rimspace.net>
+Copyright 2012 by Olivier MenguE<eacute> L<mailto:dolmen@cpan.org>
 All Rights Reserved.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
