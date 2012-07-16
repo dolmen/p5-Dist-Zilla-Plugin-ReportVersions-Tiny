@@ -76,8 +76,8 @@ sub pmver {
 $v .= <<'EOT';
 
 Thanks for using my code.  I hope it works for you.
-If not, please try and include this output in the bug report.
-That will help me reproduce the issue and solve you problem.
+If not, please try to include this output in the bug report.
+That will help me reproduce the issue and solve your problem.
 
 EOT
 
