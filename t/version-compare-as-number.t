@@ -8,7 +8,7 @@ use Test::MockObject;
 use Test::Warn;
 use File::Temp;
 
-use vars qw{$prereq $dz $log};
+my ($prereq, $dz, $log);
 BEGIN {
     # Done early, hopefully before anything else might load Dist::Zilla.
     my $dz_prereq = Test::MockObject->new;
