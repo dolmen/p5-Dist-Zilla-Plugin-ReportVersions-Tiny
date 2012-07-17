@@ -4,11 +4,8 @@ use warnings;
 use Test::More 0.88;
 use Test::Differences;
 use Test::Fatal qw( exception );
-use Test::MockObject;
-use File::Temp;
-use FindBin;
-use lib "$FindBin::RealBin/lib/";
 
+use lib 't/lib';
 use MockZilla;
 
 # This evaluates at runtime, which is important.

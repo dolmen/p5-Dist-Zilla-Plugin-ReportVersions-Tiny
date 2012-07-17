@@ -2,11 +2,9 @@ use strict;
 use warnings;
 
 use Test::More 0.88;
-use Test::Differences;
 use Test::Exception;
 use Test::MockObject;
 use Test::Warn;
-use File::Temp;
 
 my ($prereq, $dz, $log);
 BEGIN {

@@ -2,12 +2,8 @@ use strict;
 use warnings;
 
 use Test::More;
-use Test::Differences;
 use Test::Fatal;
-use Test::MockObject;
-use File::Temp;
-use FindBin;
-use lib "$FindBin::RealBin/lib/";
+use lib 't/lib';
 use MockZilla;
 use Dist::Zilla::Plugin::ReportVersions::Tiny;
 

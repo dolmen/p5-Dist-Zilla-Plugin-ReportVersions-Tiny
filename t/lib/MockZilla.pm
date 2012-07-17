@@ -4,6 +4,8 @@ use warnings;
 package  # no-index
     MockZilla;
 
+use Test::MockObject;
+
 # FILENAME: MockZilla.pm
 # CREATED: 18/03/12 02:39:10 by Kent Fredric (kentnl) <kentfredric@gmail.com>
 # ABSTRACT: Mock Dist::Zilla
