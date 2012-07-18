@@ -12,11 +12,7 @@ use Test::MockObject;
 #
 # Code extraced from 'exclude.t' and refactored to be self-contained.
 
-my $prereqs;
-
-my $objects = {
-
-};
+my ($prereqs, $dzil, $log);
 
 sub set_prereqs {
     my ( $self, $pr ) = @_;
@@ -25,42 +21,38 @@ sub set_prereqs {
 }
 
 sub dzil {
-    my ($self) = @_;
-    return $objects->{dz};
+    #my ($self) = @_;
+    return $dzil;
 }
 
 sub logger {
-    my ($self) = @_;
-    return $objects->{'log'};
+    #my ($self) = @_;
+    return $log;
 }
 
 sub import {
-    $objects->{dzil} or _setup();
+    $dzil or _setup();
     return 1;
 }
 
 sub _setup {
-    
-    require Test::MockObject;
+    my $pr = Test::MockObject->new();
+    $pr->set_bound( as_string_hash => \$prereqs );
 
-    $objects->{prereqs} = Test::MockObject->new();
-    $objects->{prereqs}->set_bound( as_string_hash => \$prereqs );
+    $log = Test::MockObject->new;
+    $log->set_always( log => $1 ); # FIXME What is this $1 ?
 
-    $objects->{'log'} = Test::MockObject->new;
-    $objects->{'log'}->set_always( 'log' => $1 );
+    my $logger = Test::MockObject->new;
+    $logger->set_always( proxy => $log );
 
-    $objects->{logger} = Test::MockObject->new;
-    $objects->{logger}->set_always( proxy => $objects->{log} );
+    my $chrome = Test::MockObject->new;
+    $chrome->set_always( logger => $logger );
 
-    $objects->{chrome} = Test::MockObject->new;
-    $objects->{chrome}->set_always( logger => $objects->{logger} );
-
-    $objects->{dz} = Test::MockObject->new;
-    $objects->{dz}->fake_module('Dist::Zilla');
-    $objects->{dz}->set_isa('Dist::Zilla');
-    $objects->{dz}->set_always( prereqs => $objects->{prereqs} );
-    $objects->{dz}->set_always( chrome  => $objects->{chrome} );
-
+    $dzil = Test::MockObject->new;
+    $dzil->fake_module('Dist::Zilla');
+    $dzil->set_isa('Dist::Zilla');
+    $dzil->set_always( prereqs => $pr );
+    $dzil->set_always( chrome  => $chrome );
 }
 
 1;
