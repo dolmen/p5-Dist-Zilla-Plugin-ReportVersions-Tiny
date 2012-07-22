@@ -5,7 +5,7 @@ perl:
     #- "5.14"
     - "5.16"
 install:
-    - cpanm Dist::Zilla
+    - cpanm Dist::Zilla Dist::Zilla::Plugin::Bootstrap::lib
     - dzil authordeps --missing | cpanm
     - dzil listdeps --missing | cpanm
 script: "dzil test --author --release"
