@@ -1,0 +1,64 @@
+Changes for Dist-Zilla-Plugin-ReportVersions-Tiny
+
+1.06    2012-09-19    DOLMEN (Olivier Mengué)
+
+	[ Fixes ]
+	- Use $] instead of $^V for compatibility with older perl. Thanks RJBS!
+
+	[ Meta ]
+	- DZ: drop ChangelogFromGit
+	- Rewrote 'Changes' in a human readable format instead of a bare git
+	  log.
+
+1.05    2012-07-18    DOLMEN (Olivier Mengué)
+
+	[ Fixes ]
+	- Fixed RT#67127 and other various things. See git log for details.
+	- Thanks KENTNL (Kent Frederic), MITHALDU, RSTAUNER (Randy Stauner)
+	  and APOCALYPSE!
+
+	[ Features ]
+	- Add 'include' option. Thanks RSTAUNER (Randy Stauner) and KENTNL
+	  (Kent Fredric)!
+
+	[ Tests ]
+	- More tests. Thanks KENTNL!
+	- Cleanup test dependencies (DOLMEN):
+	  - remove FindBin, vars, File::Temp.
+	  - load Test::Differences where it is used.
+
+1.04    2012-07-02    DOLMEN (Olivier Mengué)
+
+	[ Meta ]
+	- New maintainer.
+	- Add Github repo in META.
+	- Rename 'Changlog' to 'Changes'.
+
+1.03    2010-12-25    DANIELP (Daniel Pittman)
+
+	[ Fixes ]
+	- Fix misdetection of versions like '0.0.6' as 'any version'
+
+1.02    2010-11-09    DANIELP (Daniel Pittman)
+
+	[ Fixes ]
+	- Increase the width of the package name in the formatted output
+
+1.01    2010-05-31    DANIELP (Daniel Pittman)
+
+	[ Fixes ]
+	- Added a work-around for Template::Test generating a second test plan.
+
+	[ Features ]
+	- Added display of the the required version to modules, courtesy
+	  Apocalypse.
+	- Rewrite the desired version reporting to support Perl requests also.
+	- Make the "please help me out" text a little nicer.
+	- Final polish: report more nicely 'any version' rather than 0 for
+	  modules.
+
+	[ Tests ]
+	- More tests!
+
+1.00    2010-05-30    DANIELP (Daniel Pittman)
+	- First release!
