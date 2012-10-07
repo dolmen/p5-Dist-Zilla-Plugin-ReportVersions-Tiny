@@ -1,5 +1,14 @@
 Changes for Dist-Zilla-Plugin-ReportVersions-Tiny
 
+1.07    2012-10-08    DOLMEN (Olivier Mengué)
+
+	[ Fixes ]
+	- require a recent version of version.pm (0.9901) to avoid failures
+	  in t/3part-prereq.t. As 'version.pm' was not required before, its
+	  version was not reported before in t/000-report-version-tiny.t of
+	  this distribution, so I don't know exactly which version.pm was
+	  failing.
+
 1.06    2012-09-19    DOLMEN (Olivier Mengué)
 
 	[ Fixes ]
