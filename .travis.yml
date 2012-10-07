@@ -7,5 +7,5 @@ perl:
 install:
     - cpanm Dist::Zilla Dist::Zilla::Plugin::Bootstrap::lib
     - dzil authordeps --missing | cpanm
-    - dzil listdeps --missing | cpanm
+    - dzil listdeps --author --missing | cpanm
 script: "dzil test --author --release"
