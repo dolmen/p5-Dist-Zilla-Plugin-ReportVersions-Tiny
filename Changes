@@ -1,9 +1,19 @@
 Changes for Dist-Zilla-Plugin-ReportVersions-Tiny
 
+1.08    2012-10-08    DOLMEN (Olivier Mengué)
+
+	[ Fixes ]
+	- Enforce Test::More 0.88 dependency in the built distribution.
+	  This allows to avoid depending on the user using AutoPrereqs to
+	  scan our generated test file.
+	- Enforce 'version.pm' dependency as a 'develop' dependency in the
+	  built distribution. This allows 'version' to be listed in
+	  'dzil listdeps --author' as well as this plugin.
+
 1.07    2012-10-08    DOLMEN (Olivier Mengué)
 
 	[ Fixes ]
-	- require a recent version of version.pm (0.9901) to avoid failures
+	- Require a recent version of version.pm (0.9901) to avoid failures
 	  in t/3part-prereq.t. As 'version.pm' was not required before, its
 	  version was not reported before in t/000-report-version-tiny.t of
 	  this distribution, so I don't know exactly which version.pm was

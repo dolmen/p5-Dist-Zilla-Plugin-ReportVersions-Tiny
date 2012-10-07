@@ -2,6 +2,7 @@ package Dist::Zilla::Plugin::ReportVersions::Tiny;
 use Moose;
 with 'Dist::Zilla::Role::FileGatherer';
 with 'Dist::Zilla::Role::TextTemplate';
+with 'Dist::Zilla::Role::PrereqSource';
 
 use Dist::Zilla::File::FromCode;
 use version;
@@ -172,6 +173,24 @@ sub gather_files {
   $self->add_file($file);
   return;
 }
+
+sub register_prereqs {
+  my ($self) = @_;
+
+  # Dependencies of the test file we generate
+  $self->zilla->register_prereqs(
+    { phase => 'test', type => 'requires' },
+    'Test::More' => '0.88',
+  );
+  # Our own dependencies to run this plugin
+  # (dependencies that the developer using ReportVersions::Tiny in his build
+  #  will need to have. Listed with 'dzil listdeps --author'.)
+  $self->zilla->register_prereqs(
+    { phase => 'develop', type => 'requires' },
+    'version' => '0.9901',
+  );
+}
+
 
 __PACKAGE__->meta->make_immutable;
 no Moose;
