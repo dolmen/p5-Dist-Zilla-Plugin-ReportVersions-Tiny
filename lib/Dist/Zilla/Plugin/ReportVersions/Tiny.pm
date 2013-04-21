@@ -14,6 +14,13 @@ has include => (is => 'ro', isa => 'ArrayRef', default => sub { [] });
 our $template = q{use strict;
 use warnings;
 use Test::More 0.88;
+
+BEGIN {
+    if ($ENV{AUTHOR_TESTING}) {
+        Test::More::plan(skip_all => 'this test is for users, not authors');
+    }
+}
+
 # This is a relatively nice way to avoid Test::NoWarnings breaking our
 # expectations by adding extra tests, without using no_plan.  It also helps
 # avoid any other test module that feels introducing random tests, or even
