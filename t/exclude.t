@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use Test::More 0.88;
-use Test::Differences;
+use Test::Deep;
 use Test::Fatal qw( exception );
 
 use lib 't/lib';
@@ -31,7 +31,7 @@ is( exception {
     is( exception { $modules = $rv->applicable_modules }, undef,
         "we can collect the applicable modules for the distribution" );
 
-    eq_or_diff $modules, { baz => 2, foox => 1, quux => 1 },
+    cmp_deeply $modules, { baz => 2, foox => 1, quux => 1 },
         "we collected the first round of modules as expected";
 
     # Did we get the logging we expected?
