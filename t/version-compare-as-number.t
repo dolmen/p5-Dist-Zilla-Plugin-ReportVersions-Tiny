@@ -2,7 +2,6 @@ use strict;
 use warnings;
 
 use Test::More 0.88;
-use Test::Exception;
 use Test::MockObject;
 use Test::Warn;
 
