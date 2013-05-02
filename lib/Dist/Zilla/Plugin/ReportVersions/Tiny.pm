@@ -11,12 +11,15 @@ sub mvp_multivalue_args { qw{exclude include} };
 has exclude => (is => 'ro', isa => 'ArrayRef', default => sub { [] });
 has include => (is => 'ro', isa => 'ArrayRef', default => sub { [] });
 
+has skip_when_author_testing => (is => 'ro', isa => 'Bool', default => 0);
+
 our $template = q{use strict;
 use warnings;
 use Test::More 0.88;
 
 BEGIN {
-    if ($ENV{AUTHOR_TESTING}) {
+    if ($skip_when_author_testing
+        and $ENV{AUTHOR_TESTING}) {
         Test::More::plan(skip_all => 'this test is for users, not authors');
     }
 }
@@ -163,6 +166,7 @@ sub generate_test_from_prereqs {
         module_code => $module_code,
         my_version => __PACKAGE__->VERSION,
         my_package => __PACKAGE__,
+        skip_when_author_testing => $self->skip_when_author_testing || 0,
     });
 
     return $content;
@@ -282,6 +286,17 @@ who suggested adding a list of "interesting modules" to the
 F<Makefile.PL> and checking their version so that the test reports can show
 which version (if any) is in fact installed
 (see the L<CPAN> dist for an example).
+
+=item B<skip_when_author_testing>
+
+  [ReportVersions::Tiny]
+  skip_when_author_testing = 1
+
+defaults to off.
+
+When this option is set, and the AUTHOR_TESTING environment variable is
+enabled, this test is skipped. This helps avoid unwanted spam when you (the
+developer) are testing your own module.
 
 =back
 
