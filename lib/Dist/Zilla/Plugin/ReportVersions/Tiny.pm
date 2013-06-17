@@ -278,6 +278,10 @@ which version (if any) is in fact installed
 
 =back
 
+=head1 SEE ALSO
+
+L<Test::ReportPrereqs>
+
 =head1 AUTHORS
 
 Maintainer since 1.04: Olivier MenguE<eacute> L<mailto:dolmen@cpan.org>.
