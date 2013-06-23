@@ -280,7 +280,8 @@ which version (if any) is in fact installed
 
 =head1 SEE ALSO
 
-L<Test::ReportPrereqs>
+L<Test::ReportPrereqs>, L<Dist::Zilla::Plugin::ReportPrereqs> -- useful when
+the final list of prerequisites cannot be determined at build time
 
 =head1 AUTHORS
 
