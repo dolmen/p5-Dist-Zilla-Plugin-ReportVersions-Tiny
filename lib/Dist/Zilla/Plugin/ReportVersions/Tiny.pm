@@ -164,6 +164,15 @@ sub generate_test_from_prereqs {
 sub gather_files {
   my ($self) = @_;
 
+  # check if dynamic_config
+  my $distmeta = $self->zilla->distmeta;
+  if ($distmeta->{dynamic_config})
+  {
+    # dist is using [Meta::Dynamic::Config], or some other plugin that set
+    # this flag in metadata. see [Test::ReportPrereqs].
+    $self->log_warn('this distribution has dynamic_config => 1 - we may not be able to properly report on all actual prereqs.');
+  }
+
   my $file = Dist::Zilla::File::FromCode->new({
       name => 't/000-report-versions-tiny.t',
       mode => 0644,
@@ -280,7 +289,8 @@ which version (if any) is in fact installed
 
 =head1 SEE ALSO
 
-L<Test::ReportPrereqs>
+L<Test::ReportPrereqs>, L<Dist::Zilla::Plugin::ReportPrereqs> -- useful when
+the final list of prerequisites cannot be determined at build time
 
 =head1 AUTHORS
 
