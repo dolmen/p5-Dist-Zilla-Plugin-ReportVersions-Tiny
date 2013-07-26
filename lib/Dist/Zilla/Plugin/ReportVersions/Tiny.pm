@@ -299,6 +299,14 @@ To fix this, a future version of this plugin may use L<Module::Metadata> to
 extract versions, and so add this module as a C<test> prereqs of your
 distribution. [L<RT#76308|https://rt.cpan.org/Ticket/Display.html?id=76308>]
 
+=item *
+
+L<Version ranges|CPAN::Meta::Spec/Version Range> for prereqs are not supported.
+If you use them, you should use instead
+L<Dist::Zilla::Plugin::Test::ReportPrereqs>. [L<RT#87364|https://rt.cpan.org/Ticket/Display.html?id=87364>]
+
+=back
+
 =head1 SEE ALSO
 
 L<Test::ReportPrereqs> and L<Dist::Zilla::Plugin::Test::ReportPrereqs>
