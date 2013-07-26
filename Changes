@@ -1,5 +1,15 @@
 Changes for Dist-Zilla-Plugin-ReportVersions-Tiny
 
+1.09    2013-07-27    DOLMEN (Olivier Mengué)
+
+	[ Doc ]
+	- Add CAVEATS and SEE ALSO sections in POD. Read them!
+	  Thanks to David Golden, Karen Etheridge and Caleb Cushing for raising
+	  those issues!
+
+	[ Tests ]
+	- Use Test::Deep instead of Test::Differences. Thanks Karen Etheridge!
+
 1.08    2012-10-08    DOLMEN (Olivier Mengué)
 
 	[ Fixes ]
