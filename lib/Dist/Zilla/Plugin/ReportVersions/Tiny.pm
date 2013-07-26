@@ -278,9 +278,30 @@ which version (if any) is in fact installed
 
 =back
 
+=head1 CAVEATS
+
+=over 4
+
+=item *
+
+The list of prereqs that are reported is built at C<dzil build> time. Not at
+install time. This means that if the C<configure> step of the
+L<builder|Dist::Zilla::Role::Builder> generates the list of prereqs dynamically
+(see L<CPAN::Meta::Spec/dynamic_config>), that list I<may> not match the real
+list of dependencies given to the CPAN client. In that case, you should use
+instead L<Dist::Zilla::Plugin::Test::ReportPrereqs>. [L<RT#83266|https://rt.cpan.org/Ticket/Display.html?id=83266>]
+
+=item *
+
+Modules are loaded (C<require>-d, which means C<BEGIN> blocks and code outside
+subs will run) to extract their versions. So this may have side effects.
+To fix this, a future version of this plugin may use L<Module::Metadata> to
+extract versions, and so add this module as a C<test> prereqs of your
+distribution. [L<RT#76308|https://rt.cpan.org/Ticket/Display.html?id=76308>]
+
 =head1 SEE ALSO
 
-L<Test::ReportPrereqs>
+L<Test::ReportPrereqs> and L<Dist::Zilla::Plugin::Test::ReportPrereqs>
 
 =head1 AUTHORS
 
