@@ -22,7 +22,7 @@ is( exception {
 
 {
     MockZilla->set_prereqs({
-        testing => { requires => { baz => 1, quux => 1 } },
+        test    => { requires => { baz => 1, quux => 1 } },
         build   => { requires => { baz => 2, foox => 1 } },
     });
 
