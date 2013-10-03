@@ -1,5 +1,12 @@
 Changes for Dist-Zilla-Plugin-ReportVersions-Tiny
 
+1.10    2013-10-03    DOLMEN (Olivier Mengué)
+
+	[ Fixes ]
+	- RT#88083: do not report dependencies listed only as 'develop'.
+	  Thanks to Karen Etheridge, Kent Frederic, Graham Knop for raising
+	  this issue!
+
 1.09    2013-07-27    DOLMEN (Olivier Mengué)
 
 	[ Doc ]
