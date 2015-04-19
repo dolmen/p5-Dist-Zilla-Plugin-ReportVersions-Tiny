@@ -204,11 +204,18 @@ __END__
 
 =head1 NAME
 
-Dist::Zilla::Plugin::ReportVersions::Tiny - reports dependency versions during testing
+Dist::Zilla::Plugin::ReportVersions::Tiny - (DEPRECATED) reports dependency versions during testing
 
 =head1 SYNOPSIS
 
 In your F<dist.ini>, include C<[ReportVersions::Tiny]> to load the plugin.
+
+=head1 B<THIS PLUGIN IS DEPRECATED!>
+
+B<Alert:> This plugin is deprecated! It was already in low maintainance for
+years. L<[Test::ReportPrereqs]|Dist::Zilla::Plugin::Test::ReportPrereqs> is
+now much better (better implementation, better output, better maintainer),
+so use it instead!
 
 =head1 DESCRIPTION
 
@@ -337,7 +344,7 @@ Contributors:
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2012 by Olivier MenguE<eacute> L<mailto:dolmen@cpan.org>
+Copyright 2015 by Olivier MenguE<eacute> L<mailto:dolmen@cpan.org>
 All Rights Reserved.
 
 This is free software; you can redistribute it and/or modify it under
