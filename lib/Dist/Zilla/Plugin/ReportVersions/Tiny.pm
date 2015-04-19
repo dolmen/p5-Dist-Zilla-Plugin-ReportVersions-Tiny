@@ -7,6 +7,13 @@ with 'Dist::Zilla::Role::PrereqSource';
 use Dist::Zilla::File::FromCode;
 use version;
 
+before register_component => sub {
+    warnings::warnif('deprecated',
+        "!!! [ReportVersions::Tiny] is deprecated; recommended alternative: [Test::ReportPrereqs]\n",
+    );
+};
+
+
 sub mvp_multivalue_args { qw{exclude include} };
 has exclude => (is => 'ro', isa => 'ArrayRef', default => sub { [] });
 has include => (is => 'ro', isa => 'ArrayRef', default => sub { [] });
