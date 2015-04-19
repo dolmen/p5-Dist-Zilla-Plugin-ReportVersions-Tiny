@@ -150,7 +150,7 @@ sub generate_test_from_prereqs {
 
     my $perl = $self->wanted_perl( $modules );
     my $module_code = $self->generate_eval_stubs( $modules );
-    
+
     my $content = $self->fill_in_string($template, {
         perl    => $perl,
         module_code => $module_code,
