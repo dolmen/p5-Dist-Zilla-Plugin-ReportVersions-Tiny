@@ -325,6 +325,14 @@ Contributors:
 
 =item Randy Stauner
 
+=item Karen Etheridge
+
+=item Alexandr Ciornii
+
+=item Apocalypse
+
+=item Ricardo Signes
+
 =back
 
 =head1 COPYRIGHT AND LICENSE
