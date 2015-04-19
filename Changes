@@ -1,5 +1,17 @@
 Changes for Dist-Zilla-Plugin-ReportVersions-Tiny
 
+1.11    2015-04-19    DOLMEN (Olivier Mengué)
+
+	[ Features ]
+	- This plugin is now deprecated. Use [Test::ReportPrereqs] instead.
+	  A warning will be shown at runtime.
+
+	[ Doc ]
+	- This plugin is now deprecated. Use [Test::ReportPrereqs] instead.
+
+	[ Meta ]
+	- Module marked as 'x_deprecated' in META.json
+
 1.10    2013-10-03    DOLMEN (Olivier Mengué)
 
 	[ Fixes ]
