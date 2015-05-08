@@ -40,9 +40,10 @@ defined($@) and diag("$@");
 # Now, our module version dependencies:
 sub pmver {
     my ($module, $wanted) = @_;
+    (my $file = "$module.pm") =~ s{::}{/}g;
     $wanted = " (want $wanted)";
     my $pmver;
-    eval "require $module;";
+    eval { require $file };
     if ($@) {
         if ($@ =~ m/Can't locate .* in \@INC/) {
             $pmver = 'module not found.';
