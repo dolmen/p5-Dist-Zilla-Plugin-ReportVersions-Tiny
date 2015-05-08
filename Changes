@@ -1,5 +1,14 @@
 Changes for Dist-Zilla-Plugin-ReportVersions-Tiny
 
+1.12    2015-05-08    DOLMEN (Olivier Mengué)
+
+	This plugin is still deprecated.
+
+	[ Fixes ]
+	- use eval-block instead of eval-string to load modules because if.pm
+	  is incompatible with < eval "require $module" > as perl isn't able
+	  to parse < require if; >
+
 1.11    2015-04-19    DOLMEN (Olivier Mengué)
 
 	[ Features ]
